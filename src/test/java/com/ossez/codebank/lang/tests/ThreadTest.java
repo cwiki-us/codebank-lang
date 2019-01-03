@@ -23,17 +23,46 @@ import junit.framework.TestCase;
 public class ThreadTest {
 	private final static Logger logger = LoggerFactory.getLogger(ThreadTest.class);
 
-	List<String> stringList = new ArrayList<String>();
+	static volatile int num = 0;
+	static volatile boolean flag = false;
 
 	@Before
 	public void setUp() {
-		stringList = Arrays.asList("a", "b", null, "c", "", "d", " ", "e", "f");
+
 	}
 
 	@Test
-	public void testCount() {
+	public void testThreadSynchronization() {
 
-		StreamUtility.getEmptyCount(stringList);
+		// Thread Odd
+		Thread tOdd = new Thread(() -> {
+			for (; 100 > num;) {
+				if (!flag && (++num % 2 != 0)) {
+
+					logger.debug("{} The number is {}", Thread.currentThread().getName(), num);
+					flag = true;
+				}
+			}
+		});
+
+		// Thread Even
+		Thread tEven = new Thread(() -> {
+			for (; 100 > num;) {
+				if (flag && (++num % 2 == 0)) {
+
+					logger.debug("{} The number is {}", Thread.currentThread().getName(), num);
+					flag = false;
+				}
+			}
+		});
+
+		// Set Name
+		tOdd.setName("Thread 1: ");
+		tEven.setName("Thread 2: ");
+
+		// START Thread
+		tEven.start();
+		tOdd.start();
 
 	}
 }
