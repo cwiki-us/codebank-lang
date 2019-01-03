@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE RelativeLayout>
+<Configuration status="WARN">
+
+	<Properties>
+		<Property name="logFolder">/home/logs/verani/common/</Property>
+	</Properties>
+
+	<Appenders>
+		<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+		<!-- C O N S O L E - A P P E N D E R -->
+		<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout pattern="%-d{yyyy/MM/dd HH:mm:ss} %-5p [%c] - %m%n" />
+			<ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
+		</Console>
+
+		<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+		<!-- D E B U G _ F I L E - A P P E N D E R -->
+		<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+		<RollingFile name="DEBUG_FILE" append="true" fileName="${logFolder}/services_debug.log" filePattern="${logFolder}/$${date:yyyy-MM}/services-%d{MM-dd-yyyy}-%i.log">
+			<ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY" />
+			<PatternLayout>
+				<pattern>%-d{yyyy/MM/dd HH:mm:ss} %-5p [%c] - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB"></SizeBasedTriggeringPolicy>
+			</Policies>
+			<DefaultRolloverStrategy max="4" />
+		</RollingFile>
+
+		<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+		<!-- I N F O _ F I L E - A P P E N D E R -->
+		<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+		<RollingFile name="INFO_FILE" append="true" fileName="${logFolder}/services_info.log" filePattern="${infoFileName}-%d{MM-dd-yyyy}.log">
+			<ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY" />
+			<PatternLayout>
+				<pattern>%-d{yyyy/MM/dd HH:mm:ss} %-5p [%c] - %m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB"></SizeBasedTriggeringPolicy>
+			</Policies>
+			<DefaultRolloverStrategy max="4" />
+		</RollingFile>
+
+	</Appenders>
+
+	<!-- LOGGERS -->
+	<Loggers>
+
+		<Logger name="com.ossez" level="DEBUG" additivity="false">
+			<AppenderRef ref="CONSOLE" level="DEBUG" />
+			<AppenderRef ref="DEBUG_FILE" level="DEBUG" />
+			<AppenderRef ref="INFO_FILE" level="INFO" />
+		</Logger>
+
+
+		<root level="DEBUG">
+
+		</root>
+
+	</Loggers>
+
+</Configuration>
